@@ -25,19 +25,10 @@ pipeline {
                 script {
                     echo 'Running SonarQube analysis...'
                     withSonarQubeEnv('TEJU-sonarqube-server') {
-                        // If sonar-project.properties exists, this is enough:
                         sh """
                             ${scannerHome}/bin/sonar-scanner \
                             -Dsonar.login=${SONAR_TOKEN}
                         """
-                        // If you do NOT use sonar-project.properties, use:
-                        // sh """
-                        //     ${scannerHome}/bin/sonar-scanner \
-                        //     -Dsonar.projectKey=teju2707_tweet-trend-new-Project-2-ravdy \
-                        //     -Dsonar.organization=teju2707 \
-                        //     -Dsonar.host.url=https://sonarcloud.io \
-                        //     -Dsonar.login=${SONAR_TOKEN}
-                        // """
                     }
                 }
             }
