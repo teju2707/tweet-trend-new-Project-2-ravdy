@@ -27,6 +27,9 @@ pipeline {
                     withSonarQubeEnv('TEJU-sonarqube-server') {
                         sh """
                             ${scannerHome}/bin/sonar-scanner \
+                            -Dsonar.projectKey=teju2707_tweet-trend-new-Project-2-ravdy \
+                            -Dsonar.organization=teju2707 \
+                            -Dsonar.host.url=https://sonarcloud.io \
                             -Dsonar.login=${SONAR_TOKEN}
                         """
                     }
