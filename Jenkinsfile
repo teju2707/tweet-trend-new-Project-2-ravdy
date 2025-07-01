@@ -6,10 +6,9 @@ pipeline {
     }
     environment {
         PATH = "/opt/apache-maven-3.9.2/bin:$PATH"
-}
-
+    }
     stages {
-        stage 'Build' {
+        stage('Build') {
             steps {
                 script {
                     echo 'Building the project...'
@@ -17,24 +16,20 @@ pipeline {
                 }
             }
         }
-    }
-
-    stage ( 'SonarQube Analysis' ) {
-    environment {
-        scannerHome = tool name: 'TEJU-SonarQube-Scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
-    }    
-        steps {
-            script {
-                echo 'Running SonarQube analysis...'
-                withSonarQubeEnv('TEJU-sonarqube-server') {
-                    sh "${scannerHome}/bin/sonar-scanner"
+        stage('SonarQube Analysis') {
+            environment {
+                scannerHome = tool name: 'TEJU-SonarQube-Scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+            }
+            steps {
+                script {
+                    echo 'Running SonarQube analysis...'
+                    withSonarQubeEnv('TEJU-sonarqube-server') {
+                        sh "${scannerHome}/bin/sonar-scanner"
+                    }
                 }
             }
         }
     }
-
-}
-
     post {
         always {
             echo 'Cleaning up...'
