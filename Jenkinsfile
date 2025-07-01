@@ -6,6 +6,7 @@ pipeline {
     }
     environment {
         PATH = "/opt/apache-maven-3.9.2/bin:$PATH"
+        SONAR_TOKEN = credentials('sonar-token')
     }
     stages {
         stage('Build') {
@@ -24,7 +25,13 @@ pipeline {
                 script {
                     echo 'Running SonarQube analysis...'
                     withSonarQubeEnv('TEJU-sonarqube-server') {
-                        sh "${scannerHome}/bin/sonar-scanner"
+                        sh """
+                            ${scannerHome}/bin/sonar-scanner \
+                            -Dsonar.projectKey=<YOUR_PROJECT_KEY> \
+                            -Dsonar.organization=<YOUR_ORG_KEY> \
+                            -Dsonar.host.url=https://sonarcloud.io \
+                            -Dsonar.login=${SONAR_TOKEN}
+                        """
                     }
                 }
             }
