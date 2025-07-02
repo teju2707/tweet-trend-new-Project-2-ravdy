@@ -40,16 +40,4 @@ pipeline {
         }
     }
 
-    post {
-        always {
-            echo 'Cleaning up...'
-            sh 'mvn clean'
-        }
-        success {
-            echo 'Build and SonarQube analysis completed successfully.'
-        }
-        failure {
-            echo 'Build or SonarQube analysis failed.'
-        }
-    }
-}
+   
