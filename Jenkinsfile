@@ -1,15 +1,18 @@
 pipeline {
     agent {
-        node {
+        node{
             label 'maven'
         }
     }
+}
+
     environment {
         PATH = "/opt/apache-maven-3.9.2/bin:$PATH"
         SONAR_TOKEN = credentials('sonar-token')
     }
+
     stages {
-        stage('Build') {
+        stage ( 'Build') {
             steps {
                 script {
                     echo 'Building the project...'
@@ -17,42 +20,33 @@ pipeline {
                 }
             }
         }
-        stage('SonarQube Analysis') {
-            environment {
-                scannerHome = tool name: 'TEJU-SonarQube-Scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
-            }
-            steps {
-                script {
-                    echo 'Running SonarQube analysis...'
-                    withSonarQubeEnv('TEJU-sonarqube-server') {
-                        // If sonar-project.properties exists, this is enough:
-                        sh """
-                            ${scannerHome}/bin/sonar-scanner \
-                            -Dsonar.login=${SONAR_TOKEN}
-                        """
-                        // If you do NOT use sonar-project.properties, use:
-                        // sh """
-                        //     ${scannerHome}/bin/sonar-scanner \
-                        //     -Dsonar.projectKey=teju2707_tweet-trend-new-Project-2-ravdy \
-                        //     -Dsonar.organization=teju2707 \
-                        //     -Dsonar.host.url=https://sonarcloud.io \
-                        //     -Dsonar.login=${SONAR_TOKEN}
-                        // """
-                    }
-                }
-            }
-        }
     }
-    post {
-        always {
-            echo 'Cleaning up...'
-            sh 'mvn clean'
-        }
-        success {
-            echo 'Build and analysis completed successfully!'
-        }
-        failure {
-            echo 'Build or analysis failed.'
+stage('SonarQube Analysis') {
+    environment {
+        scannerHome = tool name: 'TEJU-SonarQube-Scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+    }
+    steps {
+        script {
+            echo 'Running SonarQube analysis...'
+            withSonarQubeEnv('TEJU-sonarqube-server') {
+                sh """
+                    ${scannerHome}/bin/sonar-scanner \
+                    -Dsonar.projectKey=teju2707_tweet-trend-new-Project-2-ravdy \
+                    -Dsonar.organization=teju2707 \
+                    -Dsonar.host.url=https://sonarcloud.io \
+                    -Dsonar.login=${SONAR_TOKEN}
+                """
+            }
         }
     }
 }
+  post {
+        always {
+            success {
+                echo 'Build and SonarQube analysis completed successfully.'
+            }
+            failure {
+                echo 'Build or SonarQube analysis failed.'
+            }
+        }
+    }
