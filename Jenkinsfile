@@ -69,15 +69,3 @@ stage('SonarQube Analysis') {
                 echo 'Build or SonarQube analysis failed.'
             }
         }
-<<<<<<< HEAD
-    }
-=======
-        success {
-            echo 'Build and analysis completed successfully!'
-        }
-        failure {
-            echo 'Build or analysis failed.'
-        }
-    }
-}
->>>>>>> 91bcdcac846f9b6d5e6fafd037c98fa1242f6831
