@@ -4,10 +4,16 @@ pipeline {
             label 'MAVEN'
         }
     }
+
+    environment {
+        MAVEN_PATH = '/opt/maven/bin:$PATH'
+    }
     stages {
-        stage('clone-code') {
+        stage(Build) {
             steps {
-                git branch: 'main', url: 'https://github.com/teju2707/tweet-trend-new-Project-2-ravdy.git'
+                script {
+                    sh 'mvn clean deploy -DskipTests'
+                }
             }
         }
     }
