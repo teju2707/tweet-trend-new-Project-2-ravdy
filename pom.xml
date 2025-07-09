@@ -28,7 +28,7 @@
     <repositories>
         <repository>
             <id>teju-maven-key</id>
-            <url>https://<your-jfrog-instance>/artifactory/teju-maven-key</url>
+            <url>https://jfrog.acme.com/artifactory/teju-maven-key</url>
         </repository>
     </repositories>
 
